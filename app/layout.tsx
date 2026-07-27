@@ -1,12 +1,12 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
+import PublicChrome from "@/components/PublicChrome";
 import type { ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="id">
       <body className="bg-black text-white">
-        <Navbar />
+        <PublicChrome />
         {children}
       </body>
     </html>

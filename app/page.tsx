@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
+import { formatArticleDate, getArticles } from "@/lib/articles";
 
 type RobloxGame = {
   playing?: number;
@@ -33,36 +36,6 @@ const heroActions = [
 ];
 
 const numberFormatter = new Intl.NumberFormat("id-ID");
-
-const latestArticles = [
-  {
-    category: "Pembaruan Game",
-    date: "25/7/2026",
-    title: "Catatan Update Beastfall RNG",
-    description:
-      "Info terbaru seputar balancing, fitur baru, dan peningkatan pengalaman bermain.",
-    imageClass:
-      "bg-[radial-gradient(circle_at_30%_25%,rgba(56,116,255,0.9),transparent_28%),linear-gradient(135deg,#0f172a_0%,#1d4ed8_52%,#f8fafc_100%)]",
-  },
-  {
-    category: "Pengumuman",
-    date: "25/7/2026",
-    title: "Event Roll dan Reward Mingguan",
-    description:
-      "Ikuti event mingguan untuk membuka peluang reward langka dan bonus spesial.",
-    imageClass:
-      "bg-[radial-gradient(circle_at_65%_35%,rgba(250,204,21,0.9),transparent_24%),linear-gradient(135deg,#020617_0%,#0f766e_50%,#1e3a8a_100%)]",
-  },
-  {
-    category: "Panduan",
-    date: "25/7/2026",
-    title: "Cara Bermain untuk Pemula",
-    description:
-      "Pelajari dasar roll, upgrade, dan strategi awal supaya progres lebih cepat.",
-    imageClass:
-      "bg-[radial-gradient(circle_at_50%_35%,rgba(255,255,255,0.82),transparent_20%),linear-gradient(135deg,#14532d_0%,#2563eb_48%,#f59e0b_100%)]",
-  },
-];
 
 const teamMembers = [
   {
@@ -110,6 +83,7 @@ async function getRobloxStats() {
 
 export default async function Home() {
   const stats = await getRobloxStats();
+  const latestArticles = (await getArticles()).slice(0, 3);
 
   return (
     <main className="bg-black text-white">
@@ -126,10 +100,12 @@ export default async function Home() {
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.52)_0%,rgba(0,0,0,0.68)_42%,rgba(0,0,0,0.94)_100%)]" />
+        <div className="animate-soft-pulse absolute left-[8%] top-[18%] -z-20 h-56 w-56 rounded-full bg-[#2563EB]/25 blur-3xl" />
+        <div className="animate-slow-drift absolute bottom-[14%] right-[10%] -z-20 h-72 w-72 rounded-full bg-cyan-400/15 blur-3xl" />
         <div className="absolute inset-0 -z-40 bg-[linear-gradient(135deg,#0b1220_0%,#020617_42%,#000_100%)]" />
 
         <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-7xl flex-col items-center justify-center px-5 py-16 text-center lg:px-8">
-          <h1>
+          <h1 className="animate-fade-up">
             <Image
               src="/logo.png"
               alt="Beastfall RNG"
@@ -145,7 +121,7 @@ export default async function Home() {
             terkuat.
           </p> */}
 
-          <div className="mt-12 grid w-full max-w-5xl grid-cols-3 gap-2 sm:gap-4">
+          <div className="animate-fade-up animation-delay-150 mt-12 grid w-full max-w-5xl grid-cols-3 gap-2 sm:gap-4">
             {heroActions.map((action) => {
               const content = (
                 <>
@@ -167,7 +143,7 @@ export default async function Home() {
               );
 
               const className =
-                "group flex min-h-44 flex-col items-center justify-center px-2 py-5 sm:min-h-72 sm:px-6 sm:py-8";
+                "group flex min-h-44 flex-col items-center justify-center px-2 py-5 transition duration-300 hover:-translate-y-2 sm:min-h-72 sm:px-6 sm:py-8";
 
               if (action.external) {
                 return (
@@ -191,14 +167,14 @@ export default async function Home() {
             })}
           </div>
 
-          <div className="mt-6 grid w-full max-w-5xl gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl bg-white/[0.04] px-6 py-5 backdrop-blur">
+          <div className="animate-fade-up animation-delay-300 mt-6 grid w-full max-w-5xl gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl bg-white/[0.04] px-6 py-5 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/[0.07]">
               <p className="text-sm font-semibold text-slate-400">Sedang Bermain</p>
               <p className="mt-2 text-4xl font-black text-white">
                 {numberFormatter.format(stats.playing)}
               </p>
             </div>
-            <div className="rounded-2xl bg-white/[0.04] px-6 py-5 backdrop-blur">
+            <div className="rounded-2xl bg-white/[0.04] px-6 py-5 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/[0.07]">
               <p className="text-sm font-semibold text-slate-400">Pengunjung</p>
               <p className="mt-2 text-4xl font-black text-white">
                 {numberFormatter.format(stats.visits)}
@@ -210,7 +186,7 @@ export default async function Home() {
 
       <section className="bg-[#ece8e1] px-5 py-20 text-[#111827] lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-10 flex items-center justify-between gap-6">
+          <ScrollReveal className="mb-10 flex items-center justify-between gap-6">
             <h2 className="text-4xl font-black uppercase tracking-tight sm:text-5xl">
               Artikel Terbaru
             </h2>
@@ -220,13 +196,23 @@ export default async function Home() {
             >
               Buka Halaman Artikel ↗
             </Link>
-          </div>
+          </ScrollReveal>
 
           <div className="grid gap-8 lg:grid-cols-3">
-            {latestArticles.map((article) => (
-              <article key={article.title} className="group">
+            {latestArticles.map((article, index) => (
+              <ScrollReveal key={article.title} delay={index * 120}>
+              <Link href={`/artikel/${article.slug}`} className="group block transition duration-300 hover:-translate-y-2">
                 <div
-                  className={`relative h-56 overflow-hidden ${article.imageClass}`}
+                  className={`relative h-56 overflow-hidden ${article.image_class}`}
+                  style={
+                    article.image_url
+                      ? {
+                          backgroundImage: `url(${article.image_url})`,
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
+                        }
+                      : undefined
+                  }
                 >
                   <div className="absolute inset-4 border border-white/30" />
                   <div className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center bg-black/70 text-white transition group-hover:bg-[#2563EB]">
@@ -237,7 +223,7 @@ export default async function Home() {
                 <div className="mt-5 flex items-center gap-3 text-xs font-black uppercase">
                   <span className="text-[#2563EB]">{article.category}</span>
                   <span className="h-4 w-px bg-[#111827]/30" />
-                  <span>{article.date}</span>
+                  <span>{formatArticleDate(article.published_at)}</span>
                 </div>
 
                 <h3 className="mt-4 text-2xl font-black leading-snug transition group-hover:text-[#2563EB]">
@@ -246,7 +232,8 @@ export default async function Home() {
                 <p className="mt-3 max-w-md text-base font-medium leading-7 text-[#111827]/80">
                   {article.description}
                 </p>
-              </article>
+              </Link>
+              </ScrollReveal>
             ))}
           </div>
 
@@ -270,7 +257,7 @@ export default async function Home() {
       >
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_22%_34%,rgba(37,99,235,0.22),transparent_30%)]" />
 
-        <div className="mx-auto flex max-w-7xl justify-end">
+        <ScrollReveal className="mx-auto flex max-w-7xl justify-end">
           <div className="max-w-xl text-right">
             <h2 className="text-4xl font-black uppercase leading-none tracking-tight sm:text-6xl lg:text-7xl">
               Akses Awal Beastfall RNG Telah Rilis
@@ -289,12 +276,12 @@ export default async function Home() {
               Mainkan Sekarang
             </a>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <section className="bg-black px-5 py-20 text-white lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="max-w-2xl">
+          <ScrollReveal className="max-w-2xl">
             <p className="text-sm font-black uppercase tracking-[0.36em] text-[#2563EB]">
               Our Team
             </p>
@@ -305,14 +292,12 @@ export default async function Home() {
               Kami membangun pengalaman Beastfall RNG bersama komunitas, dari
               game, website, sampai dukungan pemain.
             </p>
-          </div>
+          </ScrollReveal>
 
           <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {teamMembers.map((member) => (
-              <article
-                key={member.name}
-                className="group border border-white/10 bg-white/[0.03] p-6 transition hover:border-[#2563EB]/70 hover:bg-white/[0.06]"
-              >
+            {teamMembers.map((member, index) => (
+              <ScrollReveal key={member.name} delay={index * 120}>
+              <article className="group border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:-translate-y-2 hover:border-[#2563EB]/70 hover:bg-white/[0.06]">
                 <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#2563EB] text-2xl font-black text-white transition group-hover:-translate-y-1">
                   {member.initials}
                 </div>
@@ -323,13 +308,14 @@ export default async function Home() {
                   {member.role}
                 </p>
               </article>
+              </ScrollReveal>
             ))}
           </div>
         </div>
       </section>
 
       <section className="bg-[#ece8e1] px-5 py-20 text-[#111827] lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 border-y border-[#111827]/15 py-14 sm:flex-row sm:items-center">
+        <ScrollReveal className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 border-y border-[#111827]/15 py-14 sm:flex-row sm:items-center">
           <div className="max-w-2xl">
             <h2 className="text-4xl font-black uppercase leading-none tracking-tight sm:text-6xl">
               Menemukan BUG?
@@ -346,78 +332,10 @@ export default async function Home() {
           >
             Lapor Disini!
           </Link>
-        </div>
+        </ScrollReveal>
       </section>
 
-      <footer className="bg-[#111] px-5 py-14 text-center text-white lg:px-8">
-        <div className="mx-auto flex max-w-4xl flex-col items-center">
-          <a
-            href="https://www.tiktok.com/@5s.stud1o"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="TikTok"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              viewBox="0 0 16 16"
-              aria-hidden="true"
-            >
-              <path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z" />
-            </svg>
-          </a>
-
-          <Image
-            src="/logo.png"
-            alt="Beastfall RNG"
-            width={480}
-            height={129}
-            className="mt-12 h-auto w-[min(78vw,320px)] object-contain"
-          />
-
-          <div className="mt-8 flex flex-col items-center gap-3">
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-slate-500">
-              Supported by
-            </p>
-            <a
-              href="https://slashtech.id/"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Slash Tech"
-              className="transition hover:opacity-80"
-            >
-              <Image
-                src="/slash-logo.png"
-                alt="Slash logo"
-                width={180}
-                height={64}
-                className="h-10 w-auto object-contain"
-              />
-            </a>
-          </div>
-
-          <p className="mt-8 max-w-2xl text-sm font-medium leading-6 text-slate-400">
-            © 2026 Beastfall RNG. Semua logo, nama, dan aset terkait Roblox
-            adalah milik pemiliknya masing-masing. Website ini dibuat untuk
-            komunitas dan informasi pemain.
-          </p>
-
-          <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm font-black uppercase tracking-wide text-white">
-            <Link href="/artikel" className="hover:text-[#2563EB]">
-              Artikel
-            </Link>
-            <Link href="/game/panduan" className="hover:text-[#2563EB]">
-              Ketentuan Penggunaan
-            </Link>
-            <Link href="/support" className="hover:text-[#2563EB]">
-              Support
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }
