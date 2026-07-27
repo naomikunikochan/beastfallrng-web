@@ -5,6 +5,7 @@ export type BugReport = {
   title: string;
   description: string;
   image_url: string;
+  image_urls: string[];
   status: string;
   created_at: string;
 };

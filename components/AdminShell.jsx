@@ -3,12 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { adminLogoutAction } from "@/app/admin/actions";
 
 const menus = [
   { label: "Beranda", href: "/admin/beranda", icon: "⌂" },
   { label: "Artikel", href: "/admin/artikel", icon: "▤" },
+  { label: "Media", href: "/admin/media", icon: "▧" },
   { label: "Pelapor Bug", href: "/admin/pelapor-bug", icon: "!" },
   { label: "Pengaturan Website", href: "/admin/pengaturan", icon: "⚙" },
 ];
@@ -33,6 +34,7 @@ function getServerThemeSnapshot() {
 
 export default function AdminShell({ children, title, subtitle }) {
   const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useSyncExternalStore(
     subscribeTheme,
     getThemeSnapshot,
@@ -107,6 +109,13 @@ export default function AdminShell({ children, title, subtitle }) {
           <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <button
+                onClick={() => setMobileOpen(true)}
+                aria-label="Buka menu admin"
+                className="flex h-10 w-10 items-center justify-center rounded-md bg-[var(--admin-accent)] text-white lg:hidden"
+              >
+                ☰
+              </button>
+              <button
                 onClick={toggleTheme}
                 aria-label="Toggle admin theme"
                 className="relative flex h-10 w-16 items-center rounded-full bg-[var(--admin-accent-soft)] p-1 transition"
@@ -151,22 +160,65 @@ export default function AdminShell({ children, title, subtitle }) {
                 {subtitle}
               </p>
             </div>
-            <div className="grid grid-cols-3 gap-2 rounded-md bg-[var(--admin-surface)] p-2 shadow-sm lg:hidden">
-              {menus.map((menu) => (
-                <Link
-                  key={menu.href}
-                  href={menu.href}
-                  className="rounded bg-[var(--admin-accent)] px-3 py-2 text-center text-xs font-bold text-white"
-                >
-                  {menu.label}
-                </Link>
-              ))}
-            </div>
           </div>
 
           {children}
         </div>
       </div>
+
+      {mobileOpen && (
+        <div className="fixed inset-0 z-[9999] bg-black/50 lg:hidden" onClick={() => setMobileOpen(false)}>
+          <aside
+            className="h-full w-72 border-r px-5 py-8 shadow-xl"
+            style={{ background: "var(--admin-surface)", borderColor: "var(--admin-border)" }}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <Link href="/admin/beranda" onClick={() => setMobileOpen(false)}>
+                <Image
+                  src="/logo.png"
+                  alt="Beastfall RNG"
+                  width={180}
+                  height={48}
+                  className="h-auto w-40 object-contain"
+                />
+                <span className="mt-1 block text-base font-semibold text-[var(--admin-text)]">
+                  Admin Panel
+                </span>
+              </Link>
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="rounded-md bg-[var(--admin-accent-soft)] px-3 py-2 text-[var(--admin-muted)]"
+                aria-label="Tutup menu admin"
+              >
+                ×
+              </button>
+            </div>
+
+            <nav className="mt-10 grid gap-2">
+              {menus.map((menu) => {
+                const active = pathname === menu.href;
+
+                return (
+                  <Link
+                    key={menu.href}
+                    href={menu.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center gap-3 rounded-md px-4 py-3 text-base font-medium transition ${
+                      active
+                        ? "bg-[var(--admin-accent)] text-white shadow-lg shadow-[#6C5CE7]/25"
+                        : "text-[var(--admin-muted)] hover:bg-[var(--admin-accent-soft)] hover:text-[var(--admin-accent)]"
+                    }`}
+                  >
+                    <span className="w-5 text-center">{menu.icon}</span>
+                    {menu.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </aside>
+        </div>
+      )}
     </main>
   );
 }

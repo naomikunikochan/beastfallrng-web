@@ -74,7 +74,10 @@ export async function createBugReport(formData: FormData) {
   const title = String(formData.get("title") || "").trim();
   const description = String(formData.get("description") || "").trim();
   const recaptchaToken = String(formData.get("g-recaptcha-response") || "").trim();
-  const imageFile = formData.get("image");
+  const imageFiles = formData
+    .getAll("image")
+    .filter((file): file is File => file instanceof File && file.size > 0)
+    .slice(0, 3);
 
   if (!reporterName || !title || !description) {
     throw new Error("Nama, judul bug, dan deskripsi wajib diisi");
@@ -86,7 +89,9 @@ export async function createBugReport(formData: FormData) {
 
   await verifyRecaptcha(recaptchaToken);
 
-  const imageUrl = imageFile instanceof File ? await uploadBugImage(imageFile, title) : "";
+  const imageUrls = await Promise.all(
+    imageFiles.map((file) => uploadBugImage(file, title)),
+  );
 
   const response = await fetch(`${url}/rest/v1/bug_reports`, {
     method: "POST",
@@ -101,7 +106,8 @@ export async function createBugReport(formData: FormData) {
       contact,
       title,
       description,
-      image_url: imageUrl,
+      image_url: imageUrls[0] || "",
+      image_urls: imageUrls,
     }),
   });
 

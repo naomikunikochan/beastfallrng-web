@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
+import AnimatedTooltipMotion from "@/components/ui/animated-tooltip";
 import { formatArticleDate, getArticles } from "@/lib/articles";
 
 type RobloxGame = {
@@ -39,19 +40,34 @@ const numberFormatter = new Intl.NumberFormat("id-ID");
 
 const teamMembers = [
   {
-    name: "Yoga",
-    role: "Website Developer",
-    initials: "YG",
+    id: 1,
+    name: "Muhammad Farhan Aqila Ramadhan",
+    designation: "Project Manager",
+    image: "https://images.shadcnspace.com/assets/profiles/user-1.jpg",
   },
   {
-    name: "5S Studio",
-    role: "Game Creator",
-    initials: "5S",
+    id: 2,
+    name: "Yoga Rizki Pratama",
+    designation: "Programmer",
+    image: "https://images.shadcnspace.com/assets/profiles/user-2.jpg",
   },
   {
-    name: "Community",
-    role: "Player Support",
-    initials: "CM",
+    id: 3,
+    name: "Ferris",
+    designation: "Programmer",
+    image: "https://images.shadcnspace.com/assets/profiles/user-3.jpg",
+  },
+  {
+    id: 4,
+    name: "Hasbih",
+    designation: "3D Artist",
+    image: "https://images.shadcnspace.com/assets/profiles/user-4.jpg",
+  },
+  {
+    id: 5,
+    name: "Aldhira",
+    designation: "3D Artist",
+    image: "https://images.shadcnspace.com/assets/profiles/user-5.jpg",
   },
 ];
 
@@ -186,76 +202,72 @@ export default async function Home() {
 
       <section className="bg-[#ece8e1] px-5 py-20 text-[#111827] lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <ScrollReveal className="mb-10 flex items-center justify-between gap-6">
+          <ScrollReveal className="mb-10">
             <h2 className="text-4xl font-black uppercase tracking-tight sm:text-5xl">
               Artikel Terbaru
             </h2>
-            <Link
-              href="/artikel"
-              className="hidden text-sm font-semibold uppercase tracking-wide transition hover:text-[#2563EB] sm:inline-flex"
-            >
-              Buka Halaman Artikel ↗
-            </Link>
           </ScrollReveal>
 
           <div className="grid gap-8 lg:grid-cols-3">
             {latestArticles.map((article, index) => (
               <ScrollReveal key={article.title} delay={index * 120}>
-              <Link href={`/artikel/${article.slug}`} className="group block transition duration-300 hover:-translate-y-2">
-                <div
-                  className={`relative h-56 overflow-hidden ${article.image_class}`}
-                  style={
-                    article.image_url
-                      ? {
+                <Link href={`/artikel/${article.slug}`} className="group block transition duration-300 hover:-translate-y-2">
+                  <div
+                    className={`relative h-56 overflow-hidden ${article.image_class}`}
+                    style={
+                      article.image_url
+                        ? {
                           backgroundImage: `url(${article.image_url})`,
                           backgroundPosition: "center",
                           backgroundSize: "cover",
                         }
-                      : undefined
-                  }
-                >
-                  <div className="absolute inset-4 border border-white/30" />
-                  <div className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center bg-black/70 text-white transition group-hover:bg-[#2563EB]">
-                    ↗
+                        : undefined
+                    }
+                  >
+                    <div className="absolute inset-4 border border-white/30" />
+                    <div className="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center bg-black/70 text-white transition group-hover:bg-[#2563EB]">
+                      ↗
+                    </div>
                   </div>
-                </div>
 
-                <div className="mt-5 flex items-center gap-3 text-xs font-black uppercase">
-                  <span className="text-[#2563EB]">{article.category}</span>
-                  <span className="h-4 w-px bg-[#111827]/30" />
-                  <span>{formatArticleDate(article.published_at)}</span>
-                </div>
+                  <div className="mt-5 flex items-center gap-3 text-xs font-black uppercase">
+                    <span className="text-[#2563EB]">{article.category}</span>
+                    <span className="h-4 w-px bg-[#111827]/30" />
+                    <span>{formatArticleDate(article.published_at)}</span>
+                  </div>
 
-                <h3 className="mt-4 text-2xl font-black leading-snug transition group-hover:text-[#2563EB]">
-                  {article.title}
-                </h3>
-                <p className="mt-3 max-w-md text-base font-medium leading-7 text-[#111827]/80">
-                  {article.description}
-                </p>
-              </Link>
+                  <h3 className="mt-4 text-2xl font-black leading-snug transition group-hover:text-[#2563EB]">
+                    {article.title}
+                  </h3>
+                  <p className="mt-3 max-w-md text-base font-medium leading-7 text-[#111827]/80">
+                    {article.description}
+                  </p>
+                </Link>
               </ScrollReveal>
             ))}
           </div>
 
           <Link
             href="/artikel"
-            className="mt-10 inline-flex text-sm font-semibold uppercase tracking-wide transition hover:text-[#2563EB] sm:hidden"
+            className="mx-auto mt-12 flex w-fit items-center justify-center bg-[#2563EB] px-8 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:-translate-y-1 hover:bg-[#1D4ED8]"
           >
-            Buka Halaman Artikel ↗
+            Buka Halaman Artikel
           </Link>
         </div>
       </section>
 
       <section
         className="relative isolate overflow-hidden px-5 py-24 text-white lg:px-8 lg:py-32"
-        style={{
-          backgroundImage:
-            "linear-gradient(90deg,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0.35)_40%,rgba(0,0,0,0.82)_100%),url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=2400&q=80')",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-        }}
       >
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_22%_34%,rgba(37,99,235,0.22),transparent_30%)]" />
+        <Image
+          src="/bsg12.jpg"
+          alt="Beastfall RNG akses awal"
+          fill
+          sizes="100vw"
+          className="absolute inset-0 -z-30 object-cover object-center"
+        />
+        <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.24)_45%,rgba(0,0,0,0.48)_100%)]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_22%_34%,rgba(37,99,235,0.12),transparent_30%)]" />
 
         <ScrollReveal className="mx-auto flex max-w-7xl justify-end">
           <div className="max-w-xl text-right">
@@ -282,35 +294,17 @@ export default async function Home() {
       <section className="bg-black px-5 py-20 text-white lg:px-8">
         <div className="mx-auto max-w-7xl">
           <ScrollReveal className="max-w-2xl">
-            <p className="text-sm font-black uppercase tracking-[0.36em] text-[#2563EB]">
-              Our Team
-            </p>
-            <h2 className="mt-4 text-4xl font-black uppercase leading-none tracking-tight sm:text-6xl">
+            <h2 className="text-4xl font-black uppercase leading-none tracking-tight sm:text-6xl">
               Tim di Balik Beastfall RNG
             </h2>
             <p className="mt-5 text-lg font-semibold leading-8 text-slate-400">
-              Kami membangun pengalaman Beastfall RNG bersama komunitas, dari
-              game, website, sampai dukungan pemain.
+              Kami membangun pengalaman Beastfall RNG bersama Team 5S Studio
             </p>
           </ScrollReveal>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {teamMembers.map((member, index) => (
-              <ScrollReveal key={member.name} delay={index * 120}>
-              <article className="group border border-white/10 bg-white/[0.03] p-6 transition duration-300 hover:-translate-y-2 hover:border-[#2563EB]/70 hover:bg-white/[0.06]">
-                <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#2563EB] text-2xl font-black text-white transition group-hover:-translate-y-1">
-                  {member.initials}
-                </div>
-                <h3 className="mt-8 text-2xl font-black text-white">
-                  {member.name}
-                </h3>
-                <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-slate-400">
-                  {member.role}
-                </p>
-              </article>
-              </ScrollReveal>
-            ))}
-          </div>
+          <ScrollReveal className="mt-12 flex justify-center border border-white/10 bg-white/[0.03] p-14">
+            <AnimatedTooltipMotion items={teamMembers} size="lg" />
+          </ScrollReveal>
         </div>
       </section>
 

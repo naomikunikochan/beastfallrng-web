@@ -26,7 +26,7 @@ export default async function ArticleDetailPage({
             href="/artikel"
             className="text-sm font-black uppercase tracking-wide text-[#3874FF] transition hover:text-white"
           >
-            ← Kembali ke Artikel
+            Kembali ke Artikel
           </Link>
           <div className="mt-8 flex flex-wrap items-center gap-3 text-xs font-black uppercase tracking-wide text-slate-400">
             <span className="text-[#3874FF]">{article.category}</span>
@@ -49,10 +49,10 @@ export default async function ArticleDetailPage({
             style={
               article.image_url
                 ? {
-                    backgroundImage: `url(${article.image_url})`,
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
-                  }
+                  backgroundImage: `url(${article.image_url})`,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                }
                 : undefined
             }
           >

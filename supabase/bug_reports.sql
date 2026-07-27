@@ -5,7 +5,8 @@ create table if not exists public.bug_reports (
   title text not null,
   description text not null,
   image_url text not null default '',
-  status text not null default 'baru',
+  image_urls jsonb not null default '[]'::jsonb,
+  status text not null default 'bug baru',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -19,6 +20,18 @@ with check (true);
 notify pgrst, 'reload schema';
 
 alter table public.bug_reports
+alter column status set default 'bug baru';
+
+update public.bug_reports
+set status = 'bug baru'
+where status = 'baru';
+
+notify pgrst, 'reload schema';
+
+alter table public.bug_reports
 add column if not exists image_url text not null default '';
+
+alter table public.bug_reports
+add column if not exists image_urls jsonb not null default '[]'::jsonb;
 
 notify pgrst, 'reload schema';

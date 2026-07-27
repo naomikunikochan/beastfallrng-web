@@ -77,7 +77,7 @@ export default function BugReportForm() {
         className="bg-black px-4 py-3 text-white outline-none ring-1 ring-white/10 focus:ring-[#3874FF]"
         required
       />
-      <FileUpload />
+      <FileUpload maxFiles={3} />
       {siteKey && <div className="g-recaptcha" data-sitekey={siteKey} />}
       <button
         disabled={pending}

@@ -6,12 +6,28 @@ import { File as FileIcon, UploadCloud, X } from "lucide-react";
 type FileUploadProps = {
   name?: string;
   currentUrl?: string;
+  maxFiles?: number;
 };
 
-export default function FileUpload({ name = "image", currentUrl = "" }: FileUploadProps) {
+export default function FileUpload({
+  name = "image",
+  currentUrl = "",
+  maxFiles = 1,
+}: FileUploadProps) {
   const [dragActive, setDragActive] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  function syncFiles(nextFiles: File[]) {
+    const transfer = new DataTransfer();
+
+    nextFiles.forEach((file) => transfer.items.add(file));
+    setFiles(nextFiles);
+
+    if (inputRef.current) {
+      inputRef.current.files = transfer.files;
+    }
+  }
 
   function handleDrag(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
@@ -25,30 +41,18 @@ export default function FileUpload({ name = "image", currentUrl = "" }: FileUplo
     setDragActive(false);
 
     if (event.dataTransfer.files?.[0]) {
-      const file = event.dataTransfer.files[0];
-      const transfer = new DataTransfer();
-
-      transfer.items.add(file);
-      setFiles([file]);
-
-      if (inputRef.current) {
-        inputRef.current.files = transfer.files;
-      }
+      syncFiles(Array.from(event.dataTransfer.files).slice(0, maxFiles));
     }
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files?.[0]) {
-      setFiles([event.target.files[0]]);
+      syncFiles(Array.from(event.target.files).slice(0, maxFiles));
     }
   }
 
-  function removeFile() {
-    setFiles([]);
-
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
+  function removeFile(indexToRemove: number) {
+    syncFiles(files.filter((_, index) => index !== indexToRemove));
   }
 
   function formatSize(bytes: number) {
@@ -65,7 +69,9 @@ export default function FileUpload({ name = "image", currentUrl = "" }: FileUplo
     <div className="rounded-xl border border-[var(--admin-border,#334155)] bg-[var(--admin-surface-soft,rgba(255,255,255,0.04))] p-4 text-[var(--admin-text,#fff)] transition-colors">
       <div className="mb-3">
         <p className="text-sm font-medium text-[var(--admin-text,#fff)]">Upload image</p>
-        <p className="mt-1 text-xs text-[var(--admin-muted,#94a3b8)]">PNG, JPG, WEBP sampai 5MB</p>
+        <p className="mt-1 text-xs text-[var(--admin-muted,#94a3b8)]">
+          PNG, JPG, WEBP sampai 5MB{maxFiles > 1 ? `, maksimal ${maxFiles} foto` : ""}
+        </p>
       </div>
 
       <input
@@ -73,6 +79,7 @@ export default function FileUpload({ name = "image", currentUrl = "" }: FileUplo
         name={name}
         type="file"
         accept="image/*"
+        multiple={maxFiles > 1}
         onChange={handleChange}
         className="hidden"
       />
@@ -96,9 +103,9 @@ export default function FileUpload({ name = "image", currentUrl = "" }: FileUplo
       </div>
 
       {files.length > 0 && (
-        <div className="mt-3 rounded-lg border border-[var(--admin-border,#334155)] bg-[var(--admin-surface,rgba(0,0,0,0.24))] p-3">
-          {files.map((file) => (
-            <div key={file.name} className="flex items-center justify-between gap-3">
+        <div className="mt-3 grid gap-2 rounded-lg border border-[var(--admin-border,#334155)] bg-[var(--admin-surface,rgba(0,0,0,0.24))] p-3">
+          {files.map((file, index) => (
+            <div key={`${file.name}-${index}`} className="flex items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="rounded bg-[var(--admin-accent-soft,rgba(37,99,235,0.14))] p-2 text-[var(--admin-accent,#2563EB)]">
                   <FileIcon className="h-5 w-5" />
@@ -110,7 +117,7 @@ export default function FileUpload({ name = "image", currentUrl = "" }: FileUplo
               </div>
               <button
                 type="button"
-                onClick={removeFile}
+                onClick={() => removeFile(index)}
                 className="rounded-md p-2 text-[var(--admin-muted,#94a3b8)] transition hover:bg-red-50 hover:text-red-600"
                 aria-label="Remove file"
               >

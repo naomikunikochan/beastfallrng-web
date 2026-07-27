@@ -17,10 +17,7 @@ export default async function ArtikelPage() {
 
         <div className="mx-auto max-w-7xl">
           <div className="animate-fade-up max-w-3xl">
-            <p className="text-sm font-black uppercase tracking-[0.38em] text-[#3874FF]">
-              Beastfall RNG News
-            </p>
-            <h1 className="mt-5 text-5xl font-black uppercase leading-none tracking-tight sm:text-7xl lg:text-8xl">
+            <h1 className="text-5xl font-black uppercase leading-none tracking-tight sm:text-7xl lg:text-8xl">
               Artikel
             </h1>
             <p className="mt-6 max-w-2xl text-lg font-semibold leading-8 text-slate-300">

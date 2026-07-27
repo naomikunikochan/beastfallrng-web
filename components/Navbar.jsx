@@ -153,10 +153,6 @@ export default function Navbar() {
                         Media
                     </Link>
 
-                    <Link href="/support" className={linkStyle}>
-                        Support
-                    </Link>
-
                     <Link href="/lapor-bug" className={linkStyle}>
                         Lapor Bug
                     </Link>
@@ -223,10 +219,16 @@ export default function Navbar() {
                 </button>
             </nav>
 
+            <div
+                className={`fixed inset-0 top-20 z-40 bg-black/55 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${mobileOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+                onClick={closeMenus}
+            />
+
             {/* Menu mobile */}
-            {mobileOpen && (
-                <div className="border-t border-white/10 bg-black px-5 py-5 lg:hidden">
-                    <div className="mx-auto flex max-w-7xl flex-col gap-2">
+            <div
+                className={`fixed left-0 right-0 top-20 z-50 border-t border-white/10 bg-black px-5 py-5 shadow-2xl transition duration-300 lg:hidden ${mobileOpen ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-6 opacity-0"}`}
+            >
+                <div className="mx-auto flex max-w-7xl flex-col gap-2">
                         <Link
                             href="/artikel"
                             onClick={closeMenus}
@@ -268,14 +270,6 @@ export default function Navbar() {
                             className="rounded-xl px-4 py-3 font-semibold text-slate-300 hover:bg-white/5 hover:text-[#3874FF]"
                         >
                             Media
-                        </Link>
-
-                        <Link
-                            href="/support"
-                            onClick={closeMenus}
-                            className="rounded-xl px-4 py-3 font-semibold text-slate-300 hover:bg-white/5 hover:text-[#3874FF]"
-                        >
-                            Support
                         </Link>
 
                         <Link
@@ -326,9 +320,8 @@ export default function Navbar() {
                                 Mainkan Sekarang
                             </a>
                         </ButtonShineHoverDemo>
-                    </div>
                 </div>
-            )}
+            </div>
         </header>
     );
 }

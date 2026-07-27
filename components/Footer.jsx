@@ -54,9 +54,7 @@ export default function Footer() {
         </div>
 
         <p className="mt-8 max-w-2xl text-sm font-medium leading-6 text-slate-400">
-          © 2026 Beastfall RNG. Semua logo, nama, dan aset terkait Roblox adalah
-          milik pemiliknya masing-masing. Website ini dibuat untuk komunitas dan
-          informasi pemain.
+          © 2026 Beastfall RNG.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm font-black uppercase tracking-wide text-white">
@@ -66,8 +64,8 @@ export default function Footer() {
           <Link href="/game/panduan" className="hover:text-[#2563EB]">
             Ketentuan Penggunaan
           </Link>
-          <Link href="/support" className="hover:text-[#2563EB]">
-            Support
+          <Link href="/media" className="hover:text-[#2563EB]">
+            Media
           </Link>
         </div>
       </div>
