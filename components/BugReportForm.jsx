@@ -17,17 +17,14 @@ export default function BugReportForm() {
 
     startTransition(async () => {
       try {
-        if (!siteKey || !window.grecaptcha) {
-          throw new Error("reCAPTCHA belum siap. Coba refresh halaman.");
+        const token = window.grecaptcha?.getResponse();
+
+        if (!siteKey || !token) {
+          throw new Error("Centang reCAPTCHA terlebih dahulu.");
         }
 
-        const token = await window.grecaptcha.execute(siteKey, {
-          action: "bug_report",
-        });
-
-        formData.set("recaptcha_token", token);
-
         await createBugReport(formData);
+        window.grecaptcha?.reset();
         form.reset();
 
         await Swal.fire({
@@ -81,6 +78,7 @@ export default function BugReportForm() {
         required
       />
       <FileUpload />
+      {siteKey && <div className="g-recaptcha" data-sitekey={siteKey} />}
       <button
         disabled={pending}
         className="bg-[#2563EB] px-6 py-4 text-sm font-black uppercase text-white transition hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-60"

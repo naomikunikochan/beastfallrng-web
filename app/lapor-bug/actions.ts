@@ -2,8 +2,6 @@
 
 type RecaptchaResponse = {
   success?: boolean;
-  score?: number;
-  action?: string;
   "error-codes"?: string[];
 };
 
@@ -27,7 +25,7 @@ async function verifyRecaptcha(token: string) {
 
   const result = (await response.json()) as RecaptchaResponse;
 
-  if (!result.success || result.action !== "bug_report" || (result.score ?? 0) < 0.5) {
+  if (!result.success) {
     throw new Error("Verifikasi reCAPTCHA gagal. Coba kirim ulang.");
   }
 }
@@ -75,7 +73,7 @@ export async function createBugReport(formData: FormData) {
   const contact = String(formData.get("contact") || "").trim();
   const title = String(formData.get("title") || "").trim();
   const description = String(formData.get("description") || "").trim();
-  const recaptchaToken = String(formData.get("recaptcha_token") || "").trim();
+  const recaptchaToken = String(formData.get("g-recaptcha-response") || "").trim();
   const imageFile = formData.get("image");
 
   if (!reporterName || !title || !description) {

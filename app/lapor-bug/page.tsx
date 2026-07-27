@@ -9,7 +9,7 @@ export default function LaporBugPage() {
     <main className="bg-black text-white">
       {siteKey && (
         <Script
-          src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`}
+          src="https://www.google.com/recaptcha/api.js"
           strategy="afterInteractive"
         />
       )}
