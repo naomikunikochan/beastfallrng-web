@@ -12,22 +12,32 @@ async function verifyRecaptcha(token: string) {
     throw new Error("reCAPTCHA secret missing");
   }
 
-  const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      secret,
-      response: token,
-    }),
-  });
+  let response: Response;
+
+  try {
+    response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        secret,
+        response: token,
+      }),
+    });
+  } catch {
+    throw new Error("Gagal menghubungi reCAPTCHA. Cek koneksi server.");
+  }
 
   const result = (await response.json()) as RecaptchaResponse;
 
   if (!result.success) {
     throw new Error("Verifikasi reCAPTCHA gagal. Coba kirim ulang.");
   }
+}
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function uploadBugImage(file: File, title: string) {
@@ -41,22 +51,53 @@ async function uploadBugImage(file: File, title: string) {
   const extension = file.name.split(".").pop() || "jpg";
   const safeTitle = title.replace(/[^a-z0-9-]/gi, "-").toLowerCase();
   const path = `bug-${safeTitle}-${crypto.randomUUID()}.${extension}`;
-  const response = await fetch(`${url}/storage/v1/object/image/${path}`, {
-    method: "POST",
-    headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
-      "Content-Type": file.type || "application/octet-stream",
-      "x-upsert": "true",
-    },
-    body: file,
-  });
+  let response: Response | null = null;
+  let lastError = "";
 
-  if (!response.ok) {
-    throw new Error(await response.text());
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      response = await fetch(`${url}/storage/v1/object/image/${path}`, {
+        method: "POST",
+        headers: {
+          apikey: key,
+          Authorization: `Bearer ${key}`,
+          "Content-Type": file.type || "application/octet-stream",
+          "x-upsert": "true",
+        },
+        body: file,
+      });
+
+      if (response.ok) {
+        return `${url}/storage/v1/object/public/image/${path}`;
+      }
+
+      lastError = await response.text();
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : "fetch failed";
+    }
+
+    if (attempt < 3) {
+      await wait(attempt * 700);
+    }
   }
 
-  return `${url}/storage/v1/object/public/image/${path}`;
+  throw new Error(
+    `Gagal upload gambar ke Supabase Storage setelah 3 percobaan. ${lastError}`,
+  );
+}
+
+function validateImageFiles(files: File[]) {
+  const maxSize = 5 * 1024 * 1024;
+
+  for (const file of files) {
+    if (!file.type.startsWith("image/")) {
+      throw new Error("File harus berupa gambar PNG, JPG, atau WEBP.");
+    }
+
+    if (file.size > maxSize) {
+      throw new Error("Ukuran tiap gambar maksimal 5MB.");
+    }
+  }
 }
 
 export async function createBugReport(formData: FormData) {
@@ -87,29 +128,54 @@ export async function createBugReport(formData: FormData) {
     throw new Error("reCAPTCHA token missing");
   }
 
+  validateImageFiles(imageFiles);
+
   await verifyRecaptcha(recaptchaToken);
 
   const imageUrls = await Promise.all(
     imageFiles.map((file) => uploadBugImage(file, title)),
   );
 
-  const response = await fetch(`${url}/rest/v1/bug_reports`, {
-    method: "POST",
-    headers: {
-      apikey: key,
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-      Prefer: "return=minimal",
-    },
-    body: JSON.stringify({
-      reporter_name: reporterName,
-      contact,
-      title,
-      description,
-      image_url: imageUrls[0] || "",
-      image_urls: imageUrls,
-    }),
-  });
+  const payload = {
+    reporter_name: reporterName,
+    contact,
+    title,
+    description,
+    image_url: imageUrls.length > 1 ? JSON.stringify(imageUrls) : imageUrls[0] || "",
+  };
+
+  let response: Response;
+
+  try {
+    response = await fetch(`${url}/rest/v1/bug_reports`, {
+      method: "POST",
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({
+        ...payload,
+        image_urls: imageUrls,
+      }),
+    });
+  } catch {
+    throw new Error("Gagal menyimpan laporan ke Supabase Database. Cek koneksi atau URL Supabase.");
+  }
+
+  if (!response.ok && (await response.clone().text()).includes("image_urls")) {
+    response = await fetch(`${url}/rest/v1/bug_reports`, {
+      method: "POST",
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify(payload),
+    });
+  }
 
   if (!response.ok) {
     throw new Error(await response.text());

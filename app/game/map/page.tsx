@@ -1,42 +1,58 @@
 import Footer from "@/components/Footer";
 import ScrollReveal from "@/components/ScrollReveal";
+import Image from "next/image";
 
 const maps = [
   {
-    name: "Starter Forest",
-    biome: "Forest",
-    description: "Area awal untuk belajar roll, farming coin, dan memahami pola enemy.",
-    details: ["Enemy ringan", "Spawn aman", "Cocok untuk pemula"],
+    name: "Lobby",
+    biome: "Spawn Area",
+    description: "Area utama untuk mulai bermain, roll weapon, dan bersiap sebelum masuk zona lain.",
+    details: ["Spawn utama", "Area aman", "Pusat aktivitas"],
+    image: "/lobby.png",
+    accent: "bg-blue-500",
+  },
+  {
+    name: "Giant Palace",
+    biome: "Palace",
+    description: "Istana besar untuk pemain yang sudah siap menghadapi area lebih luas dan megah.",
+    details: ["Area megah", "Eksplorasi luas", "Target midgame"],
+    image: "/giant_palace.png",
+    accent: "bg-amber-500",
+  },
+  {
+    name: "Serpent Tunnel",
+    biome: "Underground",
+    description: "Lorong bawah tanah dengan jalur sempit dan atmosfer gelap untuk tantangan menengah.",
+    details: ["Jalur sempit", "Tempo cepat", "Nuansa misterius"],
+    image: "/serpent_tunnel.png",
     accent: "bg-emerald-500",
   },
   {
-    name: "Crystal Cave",
-    biome: "Cave",
-    description: "Zona gelap berisi material langka dan jalur sempit untuk duel cepat.",
-    details: ["Drop material", "Rute bercabang", "Visual kristal biru"],
-    accent: "bg-cyan-400",
+    name: "Wisteria Bloom",
+    biome: "Bloom Forest",
+    description: "Map penuh bunga wisteria dengan suasana tenang untuk farming lanjutan dan eksplorasi.",
+    details: ["Visual bunga", "Rute santai", "Segera hadir"],
+    image: "/wisteria_blossom.png",
+    accent: "bg-fuchsia-400",
+    comingSoon: true,
   },
   {
-    name: "Lava Ruins",
-    biome: "Volcanic",
-    description: "Map panas untuk pemain midgame yang butuh tantangan lebih berat.",
-    details: ["Enemy agresif", "Area hazard", "Reward lebih besar"],
-    accent: "bg-orange-500",
-  },
-  {
-    name: "Sky Arena",
-    biome: "Arena",
-    description: "Arena terbuka untuk boss fight, showcase weapon, dan push power.",
-    details: ["Boss encounter", "Area luas", "Endgame target"],
+    name: "Celestial Peak",
+    biome: "Sky Peak",
+    description: "Puncak langit untuk progress lanjutan, showcase power, dan rasa endgame Beastfall RNG.",
+    details: ["Area tinggi", "Visual celestial", "Target endgame"],
+    image: "/celestial_peak.png",
     accent: "bg-violet-500",
+    comingSoon: true,
   },
 ];
 
 const routeTips = [
-  "Mulai dari Starter Forest sampai weapon cukup stabil.",
-  "Masuk Crystal Cave saat butuh material dan drop menengah.",
-  "Gunakan weapon burst sebelum masuk Lava Ruins.",
-  "Siapkan party atau power tinggi sebelum Sky Arena.",
+  "Mulai dari Lobby untuk roll weapon dan persiapan awal.",
+  "Eksplorasi Giant Palace untuk target midgame lebih besar.",
+  "Lanjut ke Serpent Tunnel saat damage sudah cukup stabil.",
+  "Wisteria Bloom akan dibuka untuk farming lanjutan.",
+  "Celestial Peak akan jadi target endgame berikutnya.",
 ];
 
 export default function MapPage() {
@@ -67,7 +83,7 @@ export default function MapPage() {
       <section className="bg-[#ece8e1] px-5 py-20 text-[#111827] lg:px-8">
         <div className="mx-auto max-w-7xl">
           <ScrollReveal className="mb-10 border-b border-[#111827]/15 pb-8">
-            <p className="text-sm font-black uppercase tracking-[0.32em] text-[#2563EB]">
+            <p className="text-sm font-black uppercase tracking-[0.32em] text-[#111827]">
               Area Game
             </p>
             <h2 className="mt-3 text-4xl font-black uppercase tracking-tight sm:text-5xl">
@@ -75,28 +91,47 @@ export default function MapPage() {
             </h2>
           </ScrollReveal>
 
-          <div className="grid gap-6 lg:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2">
             {maps.map((map, index) => (
-              <ScrollReveal key={map.name} delay={(index % 4) * 100}>
-                <article className="group flex h-full flex-col bg-white p-6 shadow-xl transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                  <div className={`mb-8 h-3 w-24 ${map.accent}`} />
-                  <p className="text-xs font-black uppercase tracking-[0.28em] text-[#2563EB]">
-                    {map.biome}
-                  </p>
-                  <h3 className="mt-4 text-2xl font-black uppercase leading-tight transition group-hover:text-[#2563EB]">
-                    {map.name}
-                  </h3>
-                  <p className="mt-4 text-sm font-semibold leading-7 text-[#111827]/75">
-                    {map.description}
-                  </p>
-                  <ul className="mt-6 space-y-3 text-sm font-bold text-[#111827]/80">
-                    {map.details.map((detail) => (
-                      <li key={detail} className="flex items-center gap-3">
-                        <span className={`h-2 w-2 ${map.accent}`} />
-                        {detail}
-                      </li>
-                    ))}
-                  </ul>
+              <ScrollReveal key={map.name} delay={(index % 5) * 100}>
+                <article className="group flex h-full flex-col overflow-hidden bg-white shadow-xl transition duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                  <div className="relative aspect-[16/9] overflow-hidden bg-[#111827]">
+                    <Image
+                      src={map.image}
+                      alt={map.name}
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      quality={100}
+                      priority={index < 2}
+                      className="object-cover transition duration-500 group-hover:scale-[1.02]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
+                    <div className={`absolute bottom-4 left-4 h-2 w-20 ${map.accent}`} />
+                    {map.comingSoon && (
+                      <div className="absolute right-4 top-4 bg-black/80 px-3 py-2 text-xs font-black uppercase tracking-wide text-white backdrop-blur">
+                        Coming Soon
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <p className="text-xs font-black uppercase tracking-[0.28em] text-[#2563EB]">
+                      {map.biome}
+                    </p>
+                    <h3 className="mt-4 text-2xl font-black uppercase leading-tight transition group-hover:text-[#2563EB]">
+                      {map.name}
+                    </h3>
+                    <p className="mt-4 text-sm font-semibold leading-7 text-[#111827]/75">
+                      {map.description}
+                    </p>
+                    <ul className="mt-6 space-y-3 text-sm font-bold text-[#111827]/80">
+                      {map.details.map((detail) => (
+                        <li key={detail} className="flex items-center gap-3">
+                          <span className={`h-2 w-2 ${map.accent}`} />
+                          {detail}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </article>
               </ScrollReveal>
             ))}

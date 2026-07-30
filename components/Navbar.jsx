@@ -8,11 +8,7 @@ import ButtonShineHoverDemo from "@/components/ui/shine-hover";
 const gameMenus = [
     {
         name: "Apa itu Beastfall RNG?",
-        href: "#apa-itu-beastfall-rng",
-    },
-    {
-        name: "Panduan",
-        href: "/game/panduan",
+        href: "/game/apa-itu-beastfall-rng",
     },
     {
         name: "Weapon",

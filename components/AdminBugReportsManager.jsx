@@ -37,7 +37,49 @@ export default function AdminBugReportsManager({ reports }) {
       return images;
     }
 
+    try {
+      const parsedImages = JSON.parse(report.image_url || "[]");
+
+      if (Array.isArray(parsedImages)) {
+        return parsedImages.filter(Boolean);
+      }
+    } catch {
+      // Old reports store a single URL as plain text.
+    }
+
     return report.image_url ? [report.image_url] : [];
+  }
+
+  async function showReportImages(report) {
+    const images = getReportImages(report);
+
+    if (images.length === 0) {
+      return;
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    await Swal.fire({
+      title: "Foto laporan",
+      html: `<div style="display:grid;gap:12px">${images
+        .map(
+          (image, index) => {
+            const safeImage = escapeHtml(image);
+
+            return `<a href="${safeImage}" target="_blank" rel="noreferrer" style="display:block;color:#8b7cf6;font-weight:700;text-align:left">Foto ${index + 1}</a>`;
+          },
+        )
+        .join("")}</div>`,
+      background: "#020617",
+      color: "#fff",
+      confirmButtonColor: "#6C5CE7",
+    });
   }
 
   function handleDelete(report) {
@@ -144,15 +186,15 @@ export default function AdminBugReportsManager({ reports }) {
               </select>
               <div className="flex justify-end gap-2">
                 {getReportImages(report).length > 0 ? (
-                  <a
-                    href={getReportImages(report)[0]}
-                    target="_blank"
-                    rel="noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => showReportImages(report)}
                     className="rounded-md bg-[var(--admin-accent)] px-3 py-2 text-sm font-bold text-white transition hover:bg-[var(--admin-accent-hover)]"
                     aria-label="Lihat foto bug"
                   >
                     <i className="bi bi-eye" />
-                  </a>
+                    <span className="ml-1 text-xs">{getReportImages(report).length}</span>
+                  </button>
                 ) : (
                   <span className="rounded-md bg-[var(--admin-accent-soft)] px-3 py-2 text-sm text-[var(--admin-muted)]">
                     <i className="bi bi-eye-slash" />

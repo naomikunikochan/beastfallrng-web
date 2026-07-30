@@ -20,13 +20,18 @@ export default function FileUpload({
 
   function syncFiles(nextFiles: File[]) {
     const transfer = new DataTransfer();
+    const limitedFiles = nextFiles.slice(0, maxFiles);
 
-    nextFiles.forEach((file) => transfer.items.add(file));
-    setFiles(nextFiles);
+    limitedFiles.forEach((file) => transfer.items.add(file));
+    setFiles(limitedFiles);
 
     if (inputRef.current) {
       inputRef.current.files = transfer.files;
     }
+  }
+
+  function addFiles(selectedFiles: FileList) {
+    syncFiles([...files, ...Array.from(selectedFiles)]);
   }
 
   function handleDrag(event: DragEvent<HTMLDivElement>) {
@@ -41,13 +46,13 @@ export default function FileUpload({
     setDragActive(false);
 
     if (event.dataTransfer.files?.[0]) {
-      syncFiles(Array.from(event.dataTransfer.files).slice(0, maxFiles));
+      addFiles(event.dataTransfer.files);
     }
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files?.[0]) {
-      syncFiles(Array.from(event.target.files).slice(0, maxFiles));
+      addFiles(event.target.files);
     }
   }
 

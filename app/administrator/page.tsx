@@ -20,8 +20,7 @@ export default async function AdminPage() {
             Login Admin
           </h1>
           <p className="mt-6 max-w-xl text-lg font-semibold leading-8 text-slate-400">
-            Masuk untuk mengelola artikel Beastfall RNG. Navbar admin dipisah
-            dari navbar public.
+            Masuk untuk mengelola admin Beastfall RNG.
           </p>
         </div>
 
