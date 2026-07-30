@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import Swal from "sweetalert2";
-import { deleteBugReport, updateBugReportStatus } from "@/app/admin/pelapor-bug/actions";
+import { deleteBugReport, updateBugReportStatus } from "@/app/administrator/pelapor-bug/actions";
 import { formatBugReportDate } from "@/lib/bug-reports";
 
 const statuses = ["bug baru", "proses fix", "done"];

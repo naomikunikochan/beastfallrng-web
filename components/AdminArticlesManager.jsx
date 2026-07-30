@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import Swal from "sweetalert2";
-import { createArticle, deleteArticle, updateArticle } from "@/app/admin/artikel/actions";
+import { createArticle, deleteArticle, updateArticle } from "@/app/administrator/artikel/actions";
 import FileUpload from "@/components/ui/file-upload";
 
 const emptyArticle = {

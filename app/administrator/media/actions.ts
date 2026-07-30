@@ -75,7 +75,7 @@ export async function createMediaItem(formData: FormData) {
   }
 
   revalidatePath("/media");
-  revalidatePath("/admin/media");
+  revalidatePath("/administrator/media");
 }
 
 export async function deleteMediaItem(id: string, imageUrl: string) {
@@ -116,5 +116,5 @@ export async function deleteMediaItem(id: string, imageUrl: string) {
   }
 
   revalidatePath("/media");
-  revalidatePath("/admin/media");
+  revalidatePath("/administrator/media");
 }

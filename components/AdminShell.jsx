@@ -4,14 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useSyncExternalStore } from "react";
-import { adminLogoutAction } from "@/app/admin/actions";
+import { adminLogoutAction } from "@/app/administrator/actions";
 
 const menus = [
-  { label: "Beranda", href: "/admin/beranda", icon: "⌂" },
-  { label: "Artikel", href: "/admin/artikel", icon: "▤" },
-  { label: "Media", href: "/admin/media", icon: "▧" },
-  { label: "Pelapor Bug", href: "/admin/pelapor-bug", icon: "!" },
-  { label: "Pengaturan Website", href: "/admin/pengaturan", icon: "⚙" },
+  { label: "Beranda", href: "/administrator/beranda", icon: "⌂" },
+  { label: "Artikel", href: "/administrator/artikel", icon: "▤" },
+  { label: "Media", href: "/administrator/media", icon: "▧" },
+  { label: "Pelapor Bug", href: "/administrator/pelapor-bug", icon: "!" },
+  { label: "Pengaturan Website", href: "/administrator/pengaturan", icon: "⚙" },
 ];
 
 function subscribeTheme(callback) {
@@ -50,7 +50,7 @@ export default function AdminShell({ children, title, subtitle }) {
   return (
     <main className={`admin-theme min-h-screen text-[var(--admin-text)] transition-colors duration-300 ${darkMode ? "admin-dark" : ""}`} style={{ background: "var(--admin-bg)" }}>
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-72 border-r px-5 py-8 shadow-sm transition-colors duration-300 lg:block" style={{ background: "var(--admin-surface)", borderColor: "var(--admin-border)" }}>
-        <Link href="/admin/beranda" className="block text-center">
+        <Link href="/administrator/beranda" className="block text-center">
           <Image
             src="/logo.png"
             alt="Beastfall RNG"
@@ -174,7 +174,7 @@ export default function AdminShell({ children, title, subtitle }) {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
-              <Link href="/admin/beranda" onClick={() => setMobileOpen(false)}>
+              <Link href="/administrator/beranda" onClick={() => setMobileOpen(false)}>
                 <Image
                   src="/logo.png"
                   alt="Beastfall RNG"

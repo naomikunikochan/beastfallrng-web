@@ -4,7 +4,7 @@ import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 export default async function AdminPage() {
   if (await isAdminAuthenticated()) {
-    redirect("/admin/beranda");
+    redirect("/administrator/beranda");
   }
 
   return (

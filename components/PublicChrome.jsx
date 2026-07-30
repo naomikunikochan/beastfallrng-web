@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 export default function PublicChrome() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/administrator")) {
     return null;
   }
 

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import Swal from "sweetalert2";
-import { createMediaItem, deleteMediaItem } from "@/app/admin/media/actions";
+import { createMediaItem, deleteMediaItem } from "@/app/administrator/media/actions";
 import FileUpload from "@/components/ui/file-upload";
 
 export default function AdminMediaManager({ items }) {

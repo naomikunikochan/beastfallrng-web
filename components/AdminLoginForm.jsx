@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import Swal from "sweetalert2";
-import { adminLoginAction } from "@/app/admin/actions";
+import { adminLoginAction } from "@/app/administrator/actions";
 
 export default function AdminLoginForm() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function AdminLoginForm() {
         color: "#fff",
       });
 
-      router.push("/admin/beranda");
+      router.push("/administrator/beranda");
       router.refresh();
     });
   }

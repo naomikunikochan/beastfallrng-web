@@ -12,7 +12,7 @@ export async function isAdminAuthenticated() {
 
 export async function requireAdmin() {
   if (!(await isAdminAuthenticated())) {
-    redirect("/admin");
+    redirect("/administrator");
   }
 }
 
@@ -30,7 +30,7 @@ export async function loginAdmin(username: string, password: string) {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
-    path: "/admin",
+    path: "/administrator",
     maxAge: 60 * 60 * 8,
   });
 
@@ -41,5 +41,5 @@ export async function logoutAdmin() {
   const cookieStore = await cookies();
 
   cookieStore.delete(cookieName);
-  redirect("/admin");
+  redirect("/administrator");
 }

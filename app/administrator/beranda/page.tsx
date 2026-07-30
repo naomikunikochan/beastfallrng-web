@@ -49,13 +49,13 @@ export default async function AdminBerandaPage() {
       </div>
 
       <div className="mt-8 grid gap-3">
-        <Link href="/admin/artikel" className="rounded-md bg-[var(--admin-accent)] px-6 py-4 text-center font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--admin-accent-hover)]">
+        <Link href="/administrator/artikel" className="rounded-md bg-[var(--admin-accent)] px-6 py-4 text-center font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--admin-accent-hover)]">
           Kelola Artikel
         </Link>
-        <Link href="/admin/pelapor-bug" className="rounded-md bg-[var(--admin-accent)] px-6 py-4 text-center font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--admin-accent-hover)]">
+        <Link href="/administrator/pelapor-bug" className="rounded-md bg-[var(--admin-accent)] px-6 py-4 text-center font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--admin-accent-hover)]">
           Pelapor Bug
         </Link>
-        <Link href="/admin/pengaturan" className="rounded-md bg-[var(--admin-accent)] px-6 py-4 text-center font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--admin-accent-hover)]">
+        <Link href="/administrator/pengaturan" className="rounded-md bg-[var(--admin-accent)] px-6 py-4 text-center font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--admin-accent-hover)]">
           Pengaturan Website
         </Link>
         <Link href="/" className="rounded-md bg-[var(--admin-accent)] px-6 py-4 text-center font-bold text-white transition hover:-translate-y-0.5 hover:bg-[var(--admin-accent-hover)]">

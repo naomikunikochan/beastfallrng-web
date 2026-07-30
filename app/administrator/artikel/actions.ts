@@ -81,7 +81,7 @@ export async function createArticle(formData: FormData) {
   }
 
   revalidatePath("/artikel");
-  revalidatePath("/admin/artikel");
+  revalidatePath("/administrator/artikel");
 }
 
 export async function updateArticle(formData: FormData) {
@@ -136,7 +136,7 @@ export async function updateArticle(formData: FormData) {
   }
 
   revalidatePath("/artikel");
-  revalidatePath("/admin/artikel");
+  revalidatePath("/administrator/artikel");
 }
 
 export async function deleteArticle(id: string) {
@@ -163,5 +163,5 @@ export async function deleteArticle(id: string) {
   }
 
   revalidatePath("/artikel");
-  revalidatePath("/admin/artikel");
+  revalidatePath("/administrator/artikel");
 }

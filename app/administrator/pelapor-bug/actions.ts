@@ -37,8 +37,8 @@ export async function updateBugReportStatus(id: string, status: string) {
     throw new Error(await response.text());
   }
 
-  revalidatePath("/admin/pelapor-bug");
-  revalidatePath("/admin/beranda");
+  revalidatePath("/administrator/pelapor-bug");
+  revalidatePath("/administrator/beranda");
 }
 
 function getStoragePaths(urls: string[]) {
@@ -88,6 +88,6 @@ export async function deleteBugReport(id: string, imageUrls: string[]) {
     throw new Error(await response.text());
   }
 
-  revalidatePath("/admin/pelapor-bug");
-  revalidatePath("/admin/beranda");
+  revalidatePath("/administrator/pelapor-bug");
+  revalidatePath("/administrator/beranda");
 }
