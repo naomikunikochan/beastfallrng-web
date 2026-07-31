@@ -11,6 +11,10 @@ const gameMenus = [
         href: "/game/apa-itu-beastfall-rng",
     },
     {
+        name: "Cara Bermain",
+        href: "/game/panduan",
+    },
+    {
         name: "Weapon",
         href: "/game/weapon",
     },

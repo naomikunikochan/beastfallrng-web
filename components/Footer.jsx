@@ -62,7 +62,7 @@ export default function Footer() {
             Artikel
           </Link>
           <Link href="/game/panduan" className="hover:text-[#2563EB]">
-            Ketentuan Penggunaan
+            Cara Bermain
           </Link>
           <Link href="/media" className="hover:text-[#2563EB]">
             Media
